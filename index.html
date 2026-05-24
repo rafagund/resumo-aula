@@ -69,7 +69,7 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
 <div class="page">
   <header>
     <div class="header-top">
-      <div class="pill"><span class="pill-dot"></span> Professor de Música</div>
+      <div class="pill"><span class="pill-dot"></span> Acompanhamento de Aulas</div>
       <div class="header-icon">&#119070;</div>
     </div>
     <h1>Resumo de <em>Aula</em></h1>
@@ -83,19 +83,19 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
     </div>
   </div>
   <div class="card">
-    <div class="field"><label><span class="lico">✅</span> O que praticamos hoje</label><textarea id="i-hoje" placeholder="Ex: Acordes G, C e D — transição ainda travando no C" oninput="render()"></textarea></div>
+    <div class="field"><label><span class="lico">✅</span> O que praticamos hoje:</label><textarea id="i-hoje" placeholder="Ex: Acordes G, C e D — transição ainda travando no C" oninput="render()"></textarea></div>
     <div class="field"><label><span class="lico">📌</span> Tarefa até a próxima aula</label><textarea id="i-tarefa" placeholder="Ex: Praticar a troca G→C devagar, 5 min por dia" oninput="render()"></textarea></div>
   </div>
   <div class="card">
     <div class="g2">
-      <div class="field"><label><span class="lico">🎵</span> Música do momento</label><input type="text" id="i-musica" placeholder="Ex: Dias Melhores" oninput="render()"></div>
+      <div class="field"><label><span class="lico">🎵</span> Música do Momento</label><input type="text" id="i-musica" placeholder="Ex: Dias Melhores" oninput="render()"></div>
       <div class="field"><label><span class="lico">📈</span> Progresso</label><div class="stars-row" id="stars"><span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span></div></div>
     </div>
-    <div class="field"><label><span class="lico">💬</span> Observação (opcional)</label><input type="text" id="i-obs" placeholder="Ex: Ótima concentração hoje!" oninput="render()"></div>
+    <div class="field"><label><span class="lico">💬</span> Observação (Opcional)</label><input type="text" id="i-obs" placeholder="Ex: Ótima concentração hoje!" oninput="render()"></div>
   </div>
-  <div class="sec" style="margin-top:28px"><span>Materiais de estudo</span></div>
+  <div class="sec" style="margin-top:28px"><span>Materiais de Estudo</span></div>
   <div class="card">
-    <div class="field"><label><span class="lico">🔗</span> Link público do Notion</label><input type="url" id="i-link" placeholder="https://notion.so/seu-link-publico" oninput="render()"></div>
+    <div class="field"><label><span class="lico">🔗</span> Link de acompanhamento - Notion:</label><input type="url" id="i-link" placeholder="https://notion.so/seu-link-publico" oninput="render()"></div>
   </div>
   <div class="preview-outer">
     <div class="preview-inner">
@@ -127,10 +127,10 @@ function render(){
   let msg='𝄞 Resumo da aula — '+nome+'\n📅 '+fmtDate(v('i-data'))+'\n';
   if(hoje)msg+='\n✅ O que praticamos:\n'+hoje+'\n';
   if(tarefa)msg+='\n📌 Tarefa até a próxima aula:\n'+tarefa+'\n';
-  if(musica)msg+='\n🎵 Música do momento: '+musica+'\n';
+  if(musica)msg+='\n🎵 Música do Momento: '+musica+'\n';
   if(prog)msg+='\n📈 Progresso: '+prog+'\n';
   if(obs)msg+='\n💬 '+obs+'\n';
-  if(link)msg+='\n📒 Anotações e músicas para estudo:\n'+link+'\n';
+  if(link)msg+='\n📒 Anotações e Músicas para Estudo:\n'+link+'\n';
   msg+='\n_Qualquer dúvida estou à disposição, bons estudos!_';
   const el=document.getElementById('preview');el.textContent=msg;el.classList.remove('empty');
   document.getElementById('chars').textContent=msg.length+' caracteres';
