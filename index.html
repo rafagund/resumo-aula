@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#F5F2EE;--s1:#FFFFFF;--s2:#F0EDE9;--s3:#EAE6E1;--border:#E2DDD7;--border2:#D4CFC8;--text:#2C2825;--sub:#8A847C;--muted:#B0AAA2;--accent:#7A6A5A;--accent-light:#EDE9E3;--accent-dim:rgba(122,106,90,0.08);--gold:#A08060;--star:#C4A060;--r:14px}
+:root{--bg:#F5F2EE;--s1:#FFFFFF;--s2:#F0EDE9;--border:#E2DDD7;--border2:#D4CFC8;--text:#2C2825;--sub:#8A847C;--muted:#B0AAA2;--accent:#7A6A5A;--accent-dim:rgba(122,106,90,0.08);--gold:#A08060;--star:#C4A060;--r:14px}
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 80% 10%,rgba(180,160,130,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 90%,rgba(160,140,120,0.06) 0%,transparent 60%);pointer-events:none;z-index:0}
 .page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 28px 100px}
@@ -29,7 +29,7 @@ header h1 em{font-style:italic;color:var(--gold)}
 .card:focus-within{border-color:var(--border2);box-shadow:0 2px 8px rgba(0,0,0,0.06),0 8px 24px rgba(0,0,0,0.04)}
 .card:focus-within::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.6}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:520px){.g2{grid-template-columns:1fr}.page{padding:32px 16px 70px}.card{padding:18px}}
+@media(max-width:520px){.g2{grid-template-columns:1fr}.page{padding:32px 16px 70px}.card{padding:18px}header h1{font-size:38px}.actions{flex-direction:column}.btn{justify-content:center}}
 .field{margin-bottom:14px}.field:last-child{margin-bottom:0}
 label{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
 .lico{font-size:12px;opacity:.7}
@@ -52,10 +52,11 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:0.4;cursor:pointer}
 .preview-body{background:var(--s1);padding:26px;font-size:13.5px;font-weight:400;line-height:1.9;color:var(--text);white-space:pre-wrap;min-height:160px}
 .preview-body.empty{color:var(--muted);font-style:italic;font-size:13px}
 .actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.btn{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:13px;font-weight:600;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:8px;letter-spacing:0.01em}
+.btn{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:13px;font-weight:600;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:8px;letter-spacing:0.01em;white-space:nowrap}
 .btn-primary{background:var(--text);color:var(--bg);box-shadow:0 2px 8px rgba(44,40,37,0.18)}
 .btn-primary:hover{background:#1A1714;box-shadow:0 4px 14px rgba(44,40,37,0.22);transform:translateY(-1px)}
-.btn-primary:active{transform:translateY(0)}
+.btn-notion{background:#000;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.18)}
+.btn-notion:hover{background:#222;transform:translateY(-1px)}
 .btn-ghost{background:var(--s1);color:var(--sub);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 .btn-ghost:hover{color:var(--text);border-color:var(--border2)}
 .toast{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;font-weight:500;color:var(--accent);opacity:0;transform:translateY(4px);transition:opacity 0.2s,transform 0.2s}
@@ -69,7 +70,7 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
   <header>
     <div class="header-top">
       <div class="pill"><span class="pill-dot"></span> Professor de Música</div>
-      <div class="header-icon" style="font-size:26px;font-family:'Instrument Serif',serif;color:var(--gold)">&#119070;</div>
+      <div class="header-icon">&#119070;</div>
     </div>
     <h1>Resumo de <em>Aula</em></h1>
     <p class="header-sub">Preencha os campos e copie a mensagem para enviar ao aluno</p>
@@ -107,9 +108,11 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
   </div>
   <div class="actions">
     <button class="btn btn-primary" onclick="copiar()">📋 Copiar mensagem</button>
+    <button class="btn btn-notion" onclick="enviarClaude()">🤖 Salvar no Notion via Claude</button>
     <button class="btn btn-ghost" onclick="limpar()">↺ Limpar</button>
   </div>
   <div class="toast" id="toast">✓ Copiado! Cole direto no WhatsApp ou e-mail.</div>
+  <div class="toast" id="toast-claude" style="color:#7A6A5A">✓ Dados copiados! Cole no chat do Claude para salvar no Notion.</div>
   <footer><div class="footer-line"></div>Feito com ♪ para suas aulas<div class="footer-line"></div></footer>
 </div>
 <script>
@@ -120,19 +123,25 @@ function fmtDate(str){const d=str?new Date(str+'T12:00'):new Date();return cap(d
 function v(id){return(document.getElementById(id)||{}).value||''}
 function render(){
   const nome=v('i-nome')||'Aluno',hoje=v('i-hoje'),tarefa=v('i-tarefa'),musica=v('i-musica'),obs=v('i-obs'),link=v('i-link');
-  const prog=starVal?'\u2605'.repeat(starVal)+'\u2606'.repeat(5-starVal):'';
-  let msg='\uD834\uDD1E Resumo da aula \u2014 '+nome+'\n\uD83D\uDCC5 '+fmtDate(v('i-data'))+'\n';
-  if(hoje)msg+='\n\u2705 O que praticamos:\n'+hoje+'\n';
-  if(tarefa)msg+='\n\uD83D\uDCCC Tarefa at\u00e9 a pr\u00f3xima aula:\n'+tarefa+'\n';
-  if(musica)msg+='\n\uD83C\uDFB5 M\u00fasica do momento: '+musica+'\n';
-  if(prog)msg+='\n\uD83D\uDCC8 Progresso: '+prog+'\n';
-  if(obs)msg+='\n\uD83D\uDCAC '+obs+'\n';
-  if(link)msg+='\n\uD83D\uDCD2 Anota\u00e7\u00f5es e m\u00fasicas para estudo:\n'+link+'\n';
-  msg+='\n_Qualquer d\u00favida estou \u00e0 disposi\u00e7\u00e3o, bons estudos!_';
+  const prog=starVal?'★'.repeat(starVal)+'☆'.repeat(5-starVal):'';
+  let msg='𝄞 Resumo da aula — '+nome+'\n📅 '+fmtDate(v('i-data'))+'\n';
+  if(hoje)msg+='\n✅ O que praticamos:\n'+hoje+'\n';
+  if(tarefa)msg+='\n📌 Tarefa até a próxima aula:\n'+tarefa+'\n';
+  if(musica)msg+='\n🎵 Música do momento: '+musica+'\n';
+  if(prog)msg+='\n📈 Progresso: '+prog+'\n';
+  if(obs)msg+='\n💬 '+obs+'\n';
+  if(link)msg+='\n📒 Anotações e músicas para estudo:\n'+link+'\n';
+  msg+='\n_Qualquer dúvida estou à disposição, bons estudos!_';
   const el=document.getElementById('preview');el.textContent=msg;el.classList.remove('empty');
   document.getElementById('chars').textContent=msg.length+' caracteres';
 }
 function copiar(){const txt=document.getElementById('preview').textContent;if(txt.startsWith('Preencha'))return;navigator.clipboard.writeText(txt).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)})}
+function enviarClaude(){
+  const nome=v('i-nome');
+  if(!nome){alert('Preencha o nome do aluno primeiro!');return;}
+  const msg='📓 SALVAR NO NOTION\nAluno: '+nome+'\nData: '+fmtDate(v('i-data'))+(v('i-hoje')?'\nO que praticamos: '+v('i-hoje'):'')+(v('i-tarefa')?'\nTarefa: '+v('i-tarefa'):'')+(v('i-musica')?'\nMúsica: '+v('i-musica'):'')+(starVal?'\nProgresso: '+'★'.repeat(starVal)+'☆'.repeat(5-starVal):'')+(v('i-obs')?'\nObservação: '+v('i-obs'):'')+(v('i-link')?'\nLink: '+v('i-link'):'');
+  navigator.clipboard.writeText(msg).then(()=>{const t=document.getElementById('toast-claude');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),5000)});
+}
 function limpar(){['i-nome','i-data','i-hoje','i-tarefa','i-musica','i-obs','i-link'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});starVal=0;document.querySelectorAll('#stars .star').forEach(x=>x.classList.remove('on'));const p=document.getElementById('preview');p.textContent='Preencha os campos acima para gerar o resumo…';p.classList.add('empty');document.getElementById('chars').textContent='0 caracteres'}
 </script>
 </body>
