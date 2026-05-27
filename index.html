@@ -86,8 +86,8 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
     </div>
   </div>
   <div class="card">
-    <div class="field"><label><span class="lico">✅</span> O que praticamos hoje</label><textarea id="i-hoje" placeholder="Ex: Acordes G, C e D — transição ainda travando no C" oninput="render()"></textarea></div>
-    <div class="field"><label><span class="lico">📌</span> Tarefa até a próxima aula</label><textarea id="i-tarefa" placeholder="Ex: Praticar a troca G→C devagar, 5 min por dia" oninput="render()"></textarea></div>
+    <div class="field"><label><span class="lico">✅</span> O que praticamos hoje</label><textarea id="i-hoje" placeholder="Ex: Acordes G, C e D" oninput="render()"></textarea></div>
+    <div class="field"><label><span class="lico">📌</span> Tarefa até a próxima aula</label><textarea id="i-tarefa" placeholder="Ex: Praticar a troca G para C devagar" oninput="render()"></textarea></div>
   </div>
   <div class="card">
     <div class="g2">
@@ -98,7 +98,7 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
   </div>
   <div class="sec" style="margin-top:28px"><span>Materiais de estudo</span></div>
   <div class="card">
-    <div class="field"><label><span class="lico">🔗</span> Link</label><input type="url" id="i-link" placeholder="https://notion.so/seu-link-publico" oninput="render()"></div>
+    <div class="field"><label><span class="lico">🔗</span> Link</label><input type="url" id="i-link" placeholder="https://notion.so/seu-link" oninput="render()"></div>
   </div>
   <div class="preview-outer">
     <div class="preview-inner">
@@ -136,43 +136,7 @@ function render(){
   document.getElementById('chars').textContent=msg.length+' caracteres';
 }
 function copiar(){const txt=document.getElementById('preview').textContent;if(txt.startsWith('Preencha'))return;navigator.clipboard.writeText(txt).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)})}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registrado')).catch(e=>console.log('SW erro:',e))})}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(()=>console.log('SW ok')).catch(e=>console.log('SW erro:',e))})}
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
