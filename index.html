@@ -98,9 +98,11 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:0.4;cursor:pointer}
 .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px}
 .modal-body{font-size:13.5px;line-height:1.9;color:var(--text);white-space:pre-wrap;background:var(--s2);border-radius:10px;padding:20px}
 .modal-footer{margin-top:16px}
-footer{margin-top:56px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:11px;color:var(--muted)}
-.footer-line{flex:1;height:1px;background:var(--border);max-width:60px}
-.btn-logout{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit;text-decoration:underline}
+footer{margin-top:56px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.footer-text{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--muted)}
+.footer-line{width:60px;height:1px;background:var(--border)}
+.btn-logout{display:inline-flex;align-items:center;gap:6px;background:var(--s1);border:1px solid var(--border);color:var(--sub);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;padding:10px 20px;border-radius:9px;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.btn-logout:hover{color:var(--text);border-color:var(--border2);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 </style>
 </head>
 <body>
@@ -132,11 +134,7 @@ footer{margin-top:56px;display:flex;align-items:center;justify-content:center;ga
     <div class="card">
       <div class="g2">
         <div class="field"><label><span class="lico">🎵</span> Música do momento</label><input type="text" id="i-musica" placeholder="Ex: Dias Melhores" oninput="render()"></div>
-        <div class="field"><label><span class="lico">📈</span> Progresso</label>
-          <div class="stars-row" id="stars">
-            <span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span>
-          </div>
-        </div>
+        <div class="field"><label><span class="lico">📈</span> Progresso</label><div class="stars-row" id="stars"><span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span></div></div>
       </div>
       <div class="field"><label><span class="lico">💬</span> Observação (opcional)</label><input type="text" id="i-obs" placeholder="Ex: Ótima concentração hoje!" oninput="render()"></div>
     </div>
@@ -150,7 +148,7 @@ footer{margin-top:56px;display:flex;align-items:center;justify-content:center;ga
           <div class="preview-bar-left"><div class="preview-dots"><span></span><span></span><span></span></div><span class="preview-label">Prévia da mensagem</span></div>
           <span class="char-count" id="chars">0 caracteres</span>
         </div>
-        <div class="preview-body empty" id="preview">Preencha os campos acima para gerar o resumo…</div>
+        <div class="preview-body empty" id="preview">Preencha os campos acima para gerar o resumo...</div>
       </div>
     </div>
     <div class="actions">
@@ -158,7 +156,6 @@ footer{margin-top:56px;display:flex;align-items:center;justify-content:center;ga
     </div>
     <div class="toast" id="toast">✓ Copiado e salvo no histórico!</div>
   </div>
-
   <div class="tab-content" id="tab-historico">
     <header>
       <div class="header-top">
@@ -170,16 +167,15 @@ footer{margin-top:56px;display:flex;align-items:center;justify-content:center;ga
     </header>
     <div class="search-bar">
       <span class="search-icon">🔍</span>
-      <input type="search" id="busca" placeholder="Buscar por aluno…" oninput="filtrarHistorico()">
+      <input type="search" id="busca" placeholder="Buscar por aluno..." oninput="filtrarHistorico()">
     </div>
-    <div id="historico-lista">
-      <div class="hist-empty"><div class="hist-icon">📭</div><p>Carregando…</p></div>
-    </div>
+    <div id="historico-lista"><div class="hist-empty"><div class="hist-icon">📭</div><p>Carregando...</p></div></div>
   </div>
-
-  <footer><div class="footer-line"></div>NoteYou · Feito com ♪<div class="footer-line"></div><button class="btn-logout" onclick="logout()">Sair</button></footer>
+  <footer>
+    <div class="footer-text"><div class="footer-line"></div>NoteYou · Feito com ♪<div class="footer-line"></div></div>
+    <button class="btn-logout" onclick="logout()">↩ Sair da conta</button>
+  </footer>
 </div>
-
 <div class="modal-overlay" id="modal" onclick="fecharModal(event)">
   <div class="modal">
     <div class="modal-header">
@@ -190,7 +186,6 @@ footer{margin-top:56px;display:flex;align-items:center;justify-content:center;ga
     <div class="modal-footer"><button class="btn btn-primary" onclick="copiarModal()">📋 Copiar</button></div>
   </div>
 </div>
-
 <script>
 let starVal=0,_aulas=[],_modalMsg='';
 document.querySelectorAll('#stars .star').forEach(s=>{s.addEventListener('click',()=>{starVal=+s.dataset.v;document.querySelectorAll('#stars .star').forEach(x=>x.classList.toggle('on',+x.dataset.v<=starVal));render()})});
@@ -202,14 +197,32 @@ function switchTab(tab,el){document.querySelectorAll('.tab-content').forEach(e=>
 function render(){
   const nome=v('i-nome')||'Aluno',hoje=v('i-hoje'),tarefa=v('i-tarefa'),musica=v('i-musica'),obs=v('i-obs'),link=v('i-link');
   const prog=starVal?'★'.repeat(starVal)+'☆'.repeat(5-starVal):'';
-  let msg='𝄞 Resumo da aula — '+nome+'\n📅 '+fmtDate(v('i-data'))+'\n';
-  if(hoje)msg+='\n✅ O que praticamos:\n'+hoje+'\n';
-  if(tarefa)msg+='\n📌 Tarefa até a próxima aula:\n'+tarefa+'\n';
-  if(musica)msg+='\n🎵 Música do momento: '+musica+'\n';
-  if(prog)msg+='\n📈 Progresso: '+prog+'\n';
-  if(obs)msg+='\n💬 '+obs+'\n';
-  if(link)msg+='\n📒 Link:\n'+link+'\n';
-  msg+='\n_Qualquer dúvida estou à disposição, bons estudos!_';
+  let msg='𝄞 Resumo da aula — '+nome+'
+📅 '+fmtDate(v('i-data'))+'
+';
+  if(hoje)msg+='
+✅ O que praticamos:
+'+hoje+'
+';
+  if(tarefa)msg+='
+📌 Tarefa até a próxima aula:
+'+tarefa+'
+';
+  if(musica)msg+='
+🎵 Música do momento: '+musica+'
+';
+  if(prog)msg+='
+📈 Progresso: '+prog+'
+';
+  if(obs)msg+='
+💬 '+obs+'
+';
+  if(link)msg+='
+📒 Link:
+'+link+'
+';
+  msg+='
+_Qualquer dúvida estou à disposição, bons estudos!_';
   const el=document.getElementById('preview');el.textContent=msg;el.classList.remove('empty');
   document.getElementById('chars').textContent=msg.length+' caracteres';
   return msg;
@@ -223,7 +236,7 @@ async function copiarESalvar(){
 }
 async function carregarHistorico(){
   const lista=document.getElementById('historico-lista');
-  lista.innerHTML='<div class="hist-empty"><div class="hist-icon">⏳</div><p>Carregando…</p></div>';
+  lista.innerHTML='<div class="hist-empty"><div class="hist-icon">⏳</div><p>Carregando...</p></div>';
   const{data,error}=await _sb.from('aulas').select('*').order('created_at',{ascending:false});
   if(error||!data){lista.innerHTML='<div class="hist-empty"><p>Erro ao carregar.</p></div>';return}
   _aulas=data;renderHistorico(data);
@@ -233,21 +246,39 @@ function renderHistorico(aulas){
   if(!aulas.length){lista.innerHTML='<div class="hist-empty"><div class="hist-icon">📭</div><p>Nenhuma aula ainda.<br>Copie um resumo para salvar aqui.</p></div>';return}
   const grupos={};
   aulas.forEach(a=>{if(!grupos[a.aluno])grupos[a.aluno]=[];grupos[a.aluno].push(a)});
-  lista.innerHTML=Object.entries(grupos).map(([aluno,aulas])=>`<div class="hist-group"><div class="hist-group-title">${aluno} <span style="font-weight:400;text-transform:none;letter-spacing:0">(${aulas.length})</span></div>${aulas.map(a=>`<div class="hist-item" onclick="abrirModal('${a.id}')"><div class="hist-item-top"><span class="hist-aluno">${a.aluno}</span><span class="hist-data">${a.data?fmtShort(a.data):'—'}</span></div><div class="hist-preview">${[a.praticamos,a.tarefa,a.musica].filter(Boolean).join(' · ')||'Sem detalhes'}</div>${a.progresso?'<div class="hist-stars">'+'★'.repeat(a.progresso)+'☆'.repeat(5-a.progresso)+'</div>':''}</div>`).join('')}</div>`).join('');
+  lista.innerHTML=Object.entries(grupos).map(([aluno,aulas])=>'<div class="hist-group"><div class="hist-group-title">'+aluno+' <span style="font-weight:400;text-transform:none;letter-spacing:0">('+aulas.length+')</span></div>'+aulas.map(a=>'<div class="hist-item" onclick="abrirModal(''+a.id+'')"><div class="hist-item-top"><span class="hist-aluno">'+a.aluno+'</span><span class="hist-data">'+(a.data?fmtShort(a.data):'—')+'</span></div><div class="hist-preview">'+([a.praticamos,a.tarefa,a.musica].filter(Boolean).join(' · ')||'Sem detalhes')+'</div>'+(a.progresso?'<div class="hist-stars">'+'★'.repeat(a.progresso)+'☆'.repeat(5-a.progresso)+'</div>':'')+'</div>').join('')+'</div>').join('');
 }
 function filtrarHistorico(){const q=document.getElementById('busca').value.toLowerCase();renderHistorico(q?_aulas.filter(a=>a.aluno.toLowerCase().includes(q)):_aulas)}
 function abrirModal(id){
   const a=_aulas.find(x=>x.id===id);if(!a)return;
   const prog=a.progresso?'★'.repeat(a.progresso)+'☆'.repeat(5-a.progresso):'';
-  let msg='𝄞 Resumo da aula — '+a.aluno+'\n';
-  if(a.data)msg+='📅 '+fmtDate(a.data)+'\n';
-  if(a.praticamos)msg+='\n✅ O que praticamos:\n'+a.praticamos+'\n';
-  if(a.tarefa)msg+='\n📌 Tarefa até a próxima aula:\n'+a.tarefa+'\n';
-  if(a.musica)msg+='\n🎵 Música do momento: '+a.musica+'\n';
-  if(prog)msg+='\n📈 Progresso: '+prog+'\n';
-  if(a.observacao)msg+='\n💬 '+a.observacao+'\n';
-  if(a.link)msg+='\n📒 Link:\n'+a.link+'\n';
-  msg+='\n_Qualquer dúvida estou à disposição, bons estudos!_';
+  let msg='𝄞 Resumo da aula — '+a.aluno+'
+';
+  if(a.data)msg+='📅 '+fmtDate(a.data)+'
+';
+  if(a.praticamos)msg+='
+✅ O que praticamos:
+'+a.praticamos+'
+';
+  if(a.tarefa)msg+='
+📌 Tarefa até a próxima aula:
+'+a.tarefa+'
+';
+  if(a.musica)msg+='
+🎵 Música do momento: '+a.musica+'
+';
+  if(prog)msg+='
+📈 Progresso: '+prog+'
+';
+  if(a.observacao)msg+='
+💬 '+a.observacao+'
+';
+  if(a.link)msg+='
+📒 Link:
+'+a.link+'
+';
+  msg+='
+_Qualquer dúvida estou à disposição, bons estudos!_';
   _modalMsg=msg;
   document.getElementById('modal-titulo').textContent=a.aluno;
   document.getElementById('modal-data').textContent=a.data?fmtShort(a.data):'';
