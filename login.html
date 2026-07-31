@@ -1,0 +1,100 @@
+cat << 'ENDOFFILE' | pbcopy
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NoteYou — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#F5F2EE;--s1:#FFFFFF;--s2:#F0EDE9;--border:#E2DDD7;--border2:#D4CFC8;--text:#2C2825;--sub:#8A847C;--muted:#B0AAA2;--accent:#7A6A5A;--accent-dim:rgba(122,106,90,0.08);--gold:#A08060;--r:14px;--ok:#3D9970;--err:#C0392B}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 80% 10%,rgba(180,160,130,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 90%,rgba(160,140,120,0.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+.card{position:relative;z-index:1;background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 4px 32px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04)}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:36px}
+.logo-icon{width:44px;height:44px;border-radius:11px;background:var(--text);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(44,40,37,0.2)}
+.logo-icon img{width:28px;height:28px;border-radius:6px}
+.logo-name{font-family:'Instrument Serif',serif;font-size:22px;font-weight:400;color:var(--text)}
+.logo-name em{font-style:italic;color:var(--gold)}
+.heading{margin-bottom:28px}
+.heading h1{font-size:24px;font-weight:600;color:var(--text);margin-bottom:6px}
+.heading p{font-size:14px;color:var(--sub);font-weight:300}
+.field{margin-bottom:16px}
+label{display:block;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+input[type=email],input[type=password]{width:100%;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;color:var(--text);background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:13px 16px;outline:none;transition:border-color 0.15s,box-shadow 0.15s,background 0.15s;appearance:none}
+input:focus{border-color:var(--border2);background:var(--s1);box-shadow:0 0 0 3px var(--accent-dim),0 1px 4px rgba(0,0,0,0.06)}
+input::placeholder{color:var(--muted)}
+.pwd-wrap{position:relative}
+.pwd-wrap input{padding-right:44px}
+.pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:4px}
+.btn-primary{width:100%;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;font-weight:600;background:var(--text);color:var(--bg);border:none;border-radius:10px;padding:14px;cursor:pointer;transition:all 0.15s;margin-top:8px;box-shadow:0 2px 8px rgba(44,40,37,0.18);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary:hover{background:#1A1714;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.spin{display:inline-block;animation:rotate 0.8s linear infinite}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.status{margin-top:16px;font-size:13px;font-weight:500;text-align:center;min-height:20px;opacity:0;transform:translateY(4px);transition:all 0.2s}
+.status.show{opacity:1;transform:translateY(0)}
+.status.ok{color:var(--ok)}.status.err{color:var(--err)}
+.forgot{text-align:center;margin-top:20px;font-size:13px;color:var(--muted)}
+.forgot a{color:var(--accent);text-decoration:none;font-weight:500}
+.card-footer{margin-top:36px;padding-top:20px;border-top:1px solid var(--border);text-align:center;font-size:12px;color:var(--muted)}
+.card-footer strong{color:var(--gold)}
+@media(max-width:480px){.card{padding:32px 24px}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon"><img src="icon-192.png" alt="NoteYou"></div>
+    <span class="logo-name">Note<em>You</em></span>
+  </div>
+  <div class="heading">
+    <h1>Bem-vindo de volta</h1>
+    <p>Entre com seu email e senha para continuar</p>
+  </div>
+  <div class="field">
+    <label>Email</label>
+    <input type="email" id="email" placeholder="seu@email.com" autocomplete="email">
+  </div>
+  <div class="field">
+    <label>Senha</label>
+    <div class="pwd-wrap">
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      <button class="pwd-toggle" onclick="togglePwd()" type="button">👁</button>
+    </div>
+  </div>
+  <button class="btn-primary" id="btn-login" onclick="login()">Entrar</button>
+  <div class="status" id="status"></div>
+  <div class="forgot"><a href="#" onclick="forgotPassword()">Esqueceu sua senha?</a></div>
+  <div class="card-footer">Plataforma para professores de <strong>música</strong></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb=supabase.createClient('https://kuwdmqdixoiaxhwfqenf.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d2RtcWRpeG9pYXhod2ZxZW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0NTA0NDYsImV4cCI6MjEwMTAyNjQ0Nn0.PdAgyovZ2HBd8x4mRmU-U12cfSJP-BBqPElPYwZy6Mw');
+(async()=>{const{data}=await sb.auth.getSession();if(data.session)window.location.href='index.html'})();
+function togglePwd(){const p=document.getElementById('password');p.type=p.type==='password'?'text':'password'}
+function setStatus(msg,type){const el=document.getElementById('status');el.textContent=msg;el.className='status show '+type}
+async function login(){
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const btn=document.getElementById('btn-login');
+  if(!email||!password){setStatus('Preencha email e senha.','err');return}
+  btn.disabled=true;btn.innerHTML='<span class="spin">⏳</span> Entrando…';setStatus('','');
+  const{data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error){setStatus('Email ou senha incorretos.','err');btn.disabled=false;btn.innerHTML='Entrar';return}
+  setStatus('✓ Login realizado!','ok');
+  setTimeout(()=>{window.location.href='index.html'},800);
+}
+async function forgotPassword(){
+  const email=document.getElementById('email').value.trim();
+  if(!email){setStatus('Digite seu email primeiro.','err');return}
+  const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/reset-password.html'});
+  if(!error)setStatus('Email de recuperação enviado!','ok');
+  else setStatus('Erro ao enviar email.','err');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+</script>
+</body>
+</html>
+ENDOFFILE
