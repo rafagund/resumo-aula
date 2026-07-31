@@ -3,136 +3,202 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resumo de Aula</title>
+<title>NoteYou</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2C2825">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Resumo Aula">
+<meta name="apple-mobile-web-app-title" content="NoteYou">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const _sb=supabase.createClient('https://kuwdmqdixoiaxhwfqenf.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d2RtcWRpeG9pYXhod2ZxZW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0NTA0NDYsImV4cCI6MjEwMTAyNjQ0Nn0.PdAgyovZ2HBd8x4mRmU-U12cfSJP-BBqPElPYwZy6Mw');
-(async()=>{const{data}=await _sb.auth.getSession();if(!data.session)window.location.href='login.html';})();
+let _user=null;
+(async()=>{const{data}=await _sb.auth.getSession();if(!data.session){window.location.href='login.html';return;}_user=data.session.user;})();
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#F5F2EE;--s1:#FFFFFF;--s2:#F0EDE9;--border:#E2DDD7;--border2:#D4CFC8;--text:#2C2825;--sub:#8A847C;--muted:#B0AAA2;--accent:#7A6A5A;--accent-dim:rgba(122,106,90,0.08);--gold:#A08060;--star:#C4A060;--r:14px}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+:root{--bg:#F5F2EE;--s1:#FFFFFF;--s2:#F0EDE9;--border:#E2DDD7;--border2:#D4CFC8;--text:#2C2825;--sub:#8A847C;--muted:#B0AAA2;--accent:#7A6A5A;--accent-dim:rgba(122,106,90,0.08);--gold:#A08060;--star:#C4A060;--r:14px;--ok:#3D9970}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 80% 10%,rgba(180,160,130,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 90%,rgba(160,140,120,0.06) 0%,transparent 60%);pointer-events:none;z-index:0}
-.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 28px 100px}
-header{margin-bottom:52px}
+.tabs{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);display:flex;padding:0 28px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.tab{font-size:13px;font-weight:600;padding:14px 20px;border:none;background:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.15s;font-family:inherit}
+.tab.active{color:var(--text);border-bottom-color:var(--gold)}
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:40px 28px 100px}
+.tab-content{display:none}.tab-content.active{display:block}
+header{margin-bottom:40px}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .pill{display:inline-flex;align-items:center;gap:7px;background:var(--s1);border:1px solid var(--border2);border-radius:100px;padding:6px 14px;font-size:10.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,0.05)}
 .pill-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink 2.5s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.header-icon{width:48px;height:48px;border-radius:12px;background:var(--s1);border:1px solid var(--border);display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;font-size:26px;font-family:'Instrument Serif',serif;color:var(--gold);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-header h1{font-family:'Instrument Serif',serif;font-size:clamp(40px,7vw,64px);font-weight:400;line-height:1;letter-spacing:-0.02em;color:var(--text)}
+.header-icon{width:48px;height:48px;border-radius:12px;background:var(--s1);border:1px solid var(--border);display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.header-icon img{width:32px;height:32px;border-radius:8px;object-fit:cover}
+header h1{font-family:'Instrument Serif',serif;font-size:clamp(36px,6vw,56px);font-weight:400;line-height:1;letter-spacing:-0.02em;color:var(--text)}
 header h1 em{font-style:italic;color:var(--gold)}
-.header-sub{margin-top:12px;font-size:14px;font-weight:300;color:var(--sub);display:flex;align-items:center;gap:10px}
+.header-sub{margin-top:10px;font-size:14px;font-weight:300;color:var(--sub);display:flex;align-items:center;gap:10px}
 .header-sub::before{content:'';width:22px;height:1px;background:var(--border2)}
-.sec{display:flex;align-items:center;gap:12px;margin:28px 0 12px}
+.sec{display:flex;align-items:center;gap:12px;margin:24px 0 12px}
 .sec span{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .sec::before,.sec::after{content:'';flex:1;height:1px;background:var(--border)}
-.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:10px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.03);transition:border-color 0.2s,box-shadow 0.2s}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:10px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.03);transition:border-color 0.2s}
 .card::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,0.6) 0%,transparent 40%);pointer-events:none}
-.card:focus-within{border-color:var(--border2);box-shadow:0 2px 8px rgba(0,0,0,0.06),0 8px 24px rgba(0,0,0,0.04)}
+.card:focus-within{border-color:var(--border2)}
 .card:focus-within::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.6}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:520px){.g2{grid-template-columns:1fr}.page{padding:32px 16px 70px}.card{padding:18px}header h1{font-size:38px}.actions{flex-direction:column}.btn{justify-content:center}}
+@media(max-width:520px){.g2{grid-template-columns:1fr}.page{padding:24px 16px 70px}.card{padding:18px}.tabs{padding:0 16px}header h1{font-size:36px}.actions{flex-direction:column}}
 .field{margin-bottom:14px}.field:last-child{margin-bottom:0}
 label{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
 .lico{font-size:12px;opacity:.7}
-input[type=text],input[type=date],input[type=url],textarea{width:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:14px;font-weight:400;color:var(--text);background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:11px 14px;outline:none;transition:border-color 0.15s,box-shadow 0.15s,background 0.15s;appearance:none}
+input[type=text],input[type=date],input[type=url],textarea,input[type=search]{width:100%;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;color:var(--text);background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:11px 14px;outline:none;transition:border-color 0.15s,box-shadow 0.15s,background 0.15s;appearance:none}
 input::placeholder,textarea::placeholder{color:var(--muted);font-weight:300}
-input:focus,textarea:focus{border-color:var(--border2);background:var(--s1);box-shadow:0 0 0 3px var(--accent-dim),0 1px 4px rgba(0,0,0,0.06)}
+input:focus,textarea:focus{border-color:var(--border2);background:var(--s1);box-shadow:0 0 0 3px var(--accent-dim)}
 textarea{resize:vertical;min-height:80px;line-height:1.7}
 input[type=date]::-webkit-calendar-picker-indicator{opacity:0.4;cursor:pointer}
 .stars-row{display:flex;align-items:center;gap:4px;margin-top:2px}
 .star{font-size:22px;cursor:pointer;color:var(--border);transition:color 0.12s,transform 0.12s;line-height:1;user-select:none}
 .star:hover{transform:scale(1.2)}.star.on{color:var(--star)}
-.preview-outer{margin-top:36px;border-radius:var(--r);background:linear-gradient(140deg,rgba(180,160,130,0.18),rgba(200,180,155,0.08));padding:1px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.preview-outer{margin-top:32px;border-radius:var(--r);background:linear-gradient(140deg,rgba(180,160,130,0.18),rgba(200,180,155,0.08));padding:1px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
 .preview-inner{border-radius:calc(var(--r) - 1px);overflow:hidden}
-.preview-bar{background:var(--s2);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.preview-bar{background:var(--s2);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .preview-bar-left{display:flex;align-items:center;gap:10px}
 .preview-dots{display:flex;gap:5px}.preview-dots span{width:8px;height:8px;border-radius:50%}
 .preview-dots span:nth-child(1){background:#E8A090}.preview-dots span:nth-child(2){background:#E8C878}.preview-dots span:nth-child(3){background:#A8C890}
 .preview-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sub)}
-.char-count{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
-.preview-body{background:var(--s1);padding:26px;font-size:13.5px;font-weight:400;line-height:1.9;color:var(--text);white-space:pre-wrap;min-height:160px}
+.char-count{font-size:11px;color:var(--muted)}
+.preview-body{background:var(--s1);padding:24px;font-size:13.5px;line-height:1.9;color:var(--text);white-space:pre-wrap;min-height:140px}
 .preview-body.empty{color:var(--muted);font-style:italic;font-size:13px}
 .actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.btn{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:13px;font-weight:600;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:8px;letter-spacing:0.01em;white-space:nowrap}
+.btn{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;font-weight:600;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .btn-primary{background:var(--text);color:var(--bg);box-shadow:0 2px 8px rgba(44,40,37,0.18)}
-.btn-primary:hover{background:#1A1714;box-shadow:0 4px 14px rgba(44,40,37,0.22);transform:translateY(-1px)}
-.btn-primary:active{transform:translateY(0)}
-.toast{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;font-weight:500;color:var(--accent);opacity:0;transform:translateY(4px);transition:opacity 0.2s,transform 0.2s}
+.btn-primary:hover{background:#1A1714;transform:translateY(-1px)}
+.toast{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;font-weight:500;color:var(--ok);opacity:0;transform:translateY(4px);transition:opacity 0.2s,transform 0.2s}
 .toast.show{opacity:1;transform:translateY(0)}
-footer{margin-top:64px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:11px;color:var(--muted);letter-spacing:0.05em}
+.search-bar{position:relative;margin-bottom:20px}
+.search-bar input{padding-left:36px}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+.hist-empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.hist-empty .hist-icon{font-size:40px;margin-bottom:12px}
+.hist-empty p{font-size:14px;line-height:1.6}
+.hist-group{margin-bottom:28px}
+.hist-group-title{font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.hist-group-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.hist-item{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.hist-item:hover{border-color:var(--border2);box-shadow:0 2px 8px rgba(0,0,0,0.08);transform:translateY(-1px)}
+.hist-item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.hist-aluno{font-size:15px;font-weight:600;color:var(--text)}
+.hist-data{font-size:12px;color:var(--muted)}
+.hist-preview{font-size:13px;color:var(--sub);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hist-stars{font-size:12px;color:var(--star);margin-top:6px}
+.modal-overlay{position:fixed;inset:0;background:rgba(44,40,37,0.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--s1);border-radius:20px;padding:32px;max-width:520px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.2);transform:translateY(20px);transition:transform 0.2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-family:'Instrument Serif',serif;font-size:22px;font-weight:400}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px}
+.modal-body{font-size:13.5px;line-height:1.9;color:var(--text);white-space:pre-wrap;background:var(--s2);border-radius:10px;padding:20px}
+.modal-footer{margin-top:16px}
+footer{margin-top:56px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:11px;color:var(--muted)}
 .footer-line{flex:1;height:1px;background:var(--border);max-width:60px}
-.btn-logout{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit;padding:0;text-decoration:underline}
-.btn-logout:hover{color:var(--accent)}
+.btn-logout{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit;text-decoration:underline}
 </style>
 </head>
 <body>
-<div class="page">
-  <header>
-    <div class="header-top">
-      <div class="pill"><span class="pill-dot"></span> Professor de Música</div>
-      <div class="header-icon"><img src="icon-192.png" alt="Resumo de Aula" style="width:32px;height:32px;border-radius:8px;object-fit:cover"></div>
-    </div>
-    <h1>Resumo de <em>Aula</em></h1>
-    <p class="header-sub">Preencha os campos e copie a mensagem para enviar ao aluno</p>
-  </header>
-  <div class="sec"><span>Dados da aula</span></div>
-  <div class="card">
-    <div class="g2">
-      <div class="field"><label><span class="lico">👤</span> Nome do aluno</label><input type="text" id="i-nome" placeholder="Ex: Davi" oninput="render()"></div>
-      <div class="field"><label><span class="lico">📅</span> Data</label><input type="date" id="i-data" oninput="render()"></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="field"><label><span class="lico">✅</span> O que praticamos hoje</label><textarea id="i-hoje" placeholder="Ex: Acordes G, C e D" oninput="render()"></textarea></div>
-    <div class="field"><label><span class="lico">📌</span> Tarefa até a próxima aula</label><textarea id="i-tarefa" placeholder="Ex: Praticar a troca G para C devagar" oninput="render()"></textarea></div>
-  </div>
-  <div class="card">
-    <div class="g2">
-      <div class="field"><label><span class="lico">🎵</span> Música do momento</label><input type="text" id="i-musica" placeholder="Ex: Dias Melhores" oninput="render()"></div>
-      <div class="field"><label><span class="lico">📈</span> Progresso</label><div class="stars-row" id="stars"><span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span></div></div>
-    </div>
-    <div class="field"><label><span class="lico">💬</span> Observação (opcional)</label><input type="text" id="i-obs" placeholder="Ex: Ótima concentração hoje!" oninput="render()"></div>
-  </div>
-  <div class="sec" style="margin-top:28px"><span>Materiais de estudo</span></div>
-  <div class="card">
-    <div class="field"><label><span class="lico">🔗</span> Link</label><input type="url" id="i-link" placeholder="https://notion.so/seu-link" oninput="render()"></div>
-  </div>
-  <div class="preview-outer">
-    <div class="preview-inner">
-      <div class="preview-bar">
-        <div class="preview-bar-left"><div class="preview-dots"><span></span><span></span><span></span></div><span class="preview-label">Prévia da mensagem</span></div>
-        <span class="char-count" id="chars">0 caracteres</span>
-      </div>
-      <div class="preview-body empty" id="preview">Preencha os campos acima para gerar o resumo…</div>
-    </div>
-  </div>
-  <div class="actions">
-    <button class="btn btn-primary" onclick="copiar()">📋 Copiar mensagem</button>
-  </div>
-  <div class="toast" id="toast">✓ Copiado! Cole direto no WhatsApp ou e-mail.</div>
-  <footer>
-    <div class="footer-line"></div>
-    Feito com ♪ para suas aulas
-    <div class="footer-line"></div>
-    <button class="btn-logout" onclick="logout()">Sair</button>
-  </footer>
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('nova',this)">✏️ Nova Aula</button>
+  <button class="tab" onclick="switchTab('historico',this)">📚 Histórico</button>
 </div>
+<div class="page">
+  <div class="tab-content active" id="tab-nova">
+    <header>
+      <div class="header-top">
+        <div class="pill"><span class="pill-dot"></span> Professor de Música</div>
+        <div class="header-icon"><img src="icon-192.png" alt="NoteYou"></div>
+      </div>
+      <h1>Resumo de <em>Aula</em></h1>
+      <p class="header-sub">Preencha os campos e copie a mensagem para enviar ao aluno</p>
+    </header>
+    <div class="sec"><span>Dados da aula</span></div>
+    <div class="card">
+      <div class="g2">
+        <div class="field"><label><span class="lico">👤</span> Nome do aluno</label><input type="text" id="i-nome" placeholder="Ex: Davi" oninput="render()"></div>
+        <div class="field"><label><span class="lico">📅</span> Data</label><input type="date" id="i-data" oninput="render()"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field"><label><span class="lico">✅</span> O que praticamos hoje</label><textarea id="i-hoje" placeholder="Ex: Acordes G, C e D" oninput="render()"></textarea></div>
+      <div class="field"><label><span class="lico">📌</span> Tarefa até a próxima aula</label><textarea id="i-tarefa" placeholder="Ex: Praticar G para C devagar" oninput="render()"></textarea></div>
+    </div>
+    <div class="card">
+      <div class="g2">
+        <div class="field"><label><span class="lico">🎵</span> Música do momento</label><input type="text" id="i-musica" placeholder="Ex: Dias Melhores" oninput="render()"></div>
+        <div class="field"><label><span class="lico">📈</span> Progresso</label>
+          <div class="stars-row" id="stars">
+            <span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span>
+          </div>
+        </div>
+      </div>
+      <div class="field"><label><span class="lico">💬</span> Observação (opcional)</label><input type="text" id="i-obs" placeholder="Ex: Ótima concentração hoje!" oninput="render()"></div>
+    </div>
+    <div class="sec" style="margin-top:24px"><span>Materiais de estudo</span></div>
+    <div class="card">
+      <div class="field"><label><span class="lico">🔗</span> Link</label><input type="url" id="i-link" placeholder="https://notion.so/seu-link" oninput="render()"></div>
+    </div>
+    <div class="preview-outer">
+      <div class="preview-inner">
+        <div class="preview-bar">
+          <div class="preview-bar-left"><div class="preview-dots"><span></span><span></span><span></span></div><span class="preview-label">Prévia da mensagem</span></div>
+          <span class="char-count" id="chars">0 caracteres</span>
+        </div>
+        <div class="preview-body empty" id="preview">Preencha os campos acima para gerar o resumo…</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="copiarESalvar()">📋 Copiar e Salvar</button>
+    </div>
+    <div class="toast" id="toast">✓ Copiado e salvo no histórico!</div>
+  </div>
+
+  <div class="tab-content" id="tab-historico">
+    <header>
+      <div class="header-top">
+        <div class="pill"><span class="pill-dot"></span> Histórico</div>
+        <div class="header-icon"><img src="icon-192.png" alt="NoteYou"></div>
+      </div>
+      <h1>Suas <em>Aulas</em></h1>
+      <p class="header-sub">Todas as aulas registradas</p>
+    </header>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="busca" placeholder="Buscar por aluno…" oninput="filtrarHistorico()">
+    </div>
+    <div id="historico-lista">
+      <div class="hist-empty"><div class="hist-icon">📭</div><p>Carregando…</p></div>
+    </div>
+  </div>
+
+  <footer><div class="footer-line"></div>NoteYou · Feito com ♪<div class="footer-line"></div><button class="btn-logout" onclick="logout()">Sair</button></footer>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="fecharModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="modal-titulo"></div><div style="font-size:12px;color:var(--muted);margin-top:4px" id="modal-data"></div></div>
+      <button class="modal-close" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer"><button class="btn btn-primary" onclick="copiarModal()">📋 Copiar</button></div>
+  </div>
+</div>
+
 <script>
-let starVal=0;
+let starVal=0,_aulas=[],_modalMsg='';
 document.querySelectorAll('#stars .star').forEach(s=>{s.addEventListener('click',()=>{starVal=+s.dataset.v;document.querySelectorAll('#stars .star').forEach(x=>x.classList.toggle('on',+x.dataset.v<=starVal));render()})});
 function cap(s){return s?s[0].toUpperCase()+s.slice(1):''}
 function fmtDate(str){const d=str?new Date(str+'T12:00'):new Date();return cap(d.toLocaleDateString('pt-BR',{weekday:'long'}))+', '+d.toLocaleDateString('pt-BR',{day:'2-digit'})+' de '+cap(d.toLocaleDateString('pt-BR',{month:'long'}))}
+function fmtShort(str){if(!str)return'';const d=new Date(str+'T12:00');return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'})}
 function v(id){return(document.getElementById(id)||{}).value||''}
+function switchTab(tab,el){document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');el.classList.add('active');if(tab==='historico')carregarHistorico()}
 function render(){
   const nome=v('i-nome')||'Aluno',hoje=v('i-hoje'),tarefa=v('i-tarefa'),musica=v('i-musica'),obs=v('i-obs'),link=v('i-link');
   const prog=starVal?'★'.repeat(starVal)+'☆'.repeat(5-starVal):'';
@@ -146,10 +212,52 @@ function render(){
   msg+='\n_Qualquer dúvida estou à disposição, bons estudos!_';
   const el=document.getElementById('preview');el.textContent=msg;el.classList.remove('empty');
   document.getElementById('chars').textContent=msg.length+' caracteres';
+  return msg;
 }
-function copiar(){const txt=document.getElementById('preview').textContent;if(txt.startsWith('Preencha'))return;navigator.clipboard.writeText(txt).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)})}
+async function copiarESalvar(){
+  if(!v('i-nome')){alert('Preencha o nome do aluno!');return}
+  const msg=render();
+  await navigator.clipboard.writeText(msg);
+  if(_user){await _sb.from('aulas').insert({user_id:_user.id,aluno:v('i-nome'),data:v('i-data')||null,praticamos:v('i-hoje')||null,tarefa:v('i-tarefa')||null,musica:v('i-musica')||null,progresso:starVal||0,observacao:v('i-obs')||null,link:v('i-link')||null})}
+  const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+}
+async function carregarHistorico(){
+  const lista=document.getElementById('historico-lista');
+  lista.innerHTML='<div class="hist-empty"><div class="hist-icon">⏳</div><p>Carregando…</p></div>';
+  const{data,error}=await _sb.from('aulas').select('*').order('created_at',{ascending:false});
+  if(error||!data){lista.innerHTML='<div class="hist-empty"><p>Erro ao carregar.</p></div>';return}
+  _aulas=data;renderHistorico(data);
+}
+function renderHistorico(aulas){
+  const lista=document.getElementById('historico-lista');
+  if(!aulas.length){lista.innerHTML='<div class="hist-empty"><div class="hist-icon">📭</div><p>Nenhuma aula ainda.<br>Copie um resumo para salvar aqui.</p></div>';return}
+  const grupos={};
+  aulas.forEach(a=>{if(!grupos[a.aluno])grupos[a.aluno]=[];grupos[a.aluno].push(a)});
+  lista.innerHTML=Object.entries(grupos).map(([aluno,aulas])=>`<div class="hist-group"><div class="hist-group-title">${aluno} <span style="font-weight:400;text-transform:none;letter-spacing:0">(${aulas.length})</span></div>${aulas.map(a=>`<div class="hist-item" onclick="abrirModal('${a.id}')"><div class="hist-item-top"><span class="hist-aluno">${a.aluno}</span><span class="hist-data">${a.data?fmtShort(a.data):'—'}</span></div><div class="hist-preview">${[a.praticamos,a.tarefa,a.musica].filter(Boolean).join(' · ')||'Sem detalhes'}</div>${a.progresso?'<div class="hist-stars">'+'★'.repeat(a.progresso)+'☆'.repeat(5-a.progresso)+'</div>':''}</div>`).join('')}</div>`).join('');
+}
+function filtrarHistorico(){const q=document.getElementById('busca').value.toLowerCase();renderHistorico(q?_aulas.filter(a=>a.aluno.toLowerCase().includes(q)):_aulas)}
+function abrirModal(id){
+  const a=_aulas.find(x=>x.id===id);if(!a)return;
+  const prog=a.progresso?'★'.repeat(a.progresso)+'☆'.repeat(5-a.progresso):'';
+  let msg='𝄞 Resumo da aula — '+a.aluno+'\n';
+  if(a.data)msg+='📅 '+fmtDate(a.data)+'\n';
+  if(a.praticamos)msg+='\n✅ O que praticamos:\n'+a.praticamos+'\n';
+  if(a.tarefa)msg+='\n📌 Tarefa até a próxima aula:\n'+a.tarefa+'\n';
+  if(a.musica)msg+='\n🎵 Música do momento: '+a.musica+'\n';
+  if(prog)msg+='\n📈 Progresso: '+prog+'\n';
+  if(a.observacao)msg+='\n💬 '+a.observacao+'\n';
+  if(a.link)msg+='\n📒 Link:\n'+a.link+'\n';
+  msg+='\n_Qualquer dúvida estou à disposição, bons estudos!_';
+  _modalMsg=msg;
+  document.getElementById('modal-titulo').textContent=a.aluno;
+  document.getElementById('modal-data').textContent=a.data?fmtShort(a.data):'';
+  document.getElementById('modal-body').textContent=msg;
+  document.getElementById('modal').classList.add('open');
+}
+function fecharModal(e){if(!e||e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open')}
+async function copiarModal(){await navigator.clipboard.writeText(_modalMsg);const btn=document.querySelector('.modal-footer .btn');btn.textContent='✓ Copiado!';setTimeout(()=>btn.innerHTML='📋 Copiar',2000)}
 async function logout(){await _sb.auth.signOut();window.location.href='login.html'}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(()=>console.log('SW ok')).catch(e=>console.log('SW erro:',e))})}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'))}
 </script>
 </body>
 </html>
