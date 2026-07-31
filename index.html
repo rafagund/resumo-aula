@@ -11,6 +11,11 @@
 <meta name="apple-mobile-web-app-title" content="Resumo Aula">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _sb=supabase.createClient('https://kuwdmqdixoiaxhwfqenf.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d2RtcWRpeG9pYXhod2ZxZW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0NTA0NDYsImV4cCI6MjEwMTAyNjQ0Nn0.PdAgyovZ2HBd8x4mRmU-U12cfSJP-BBqPElPYwZy6Mw');
+(async()=>{const{data}=await _sb.auth.getSession();if(!data.session)window.location.href='login.html';})();
+</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#F5F2EE;--s1:#FFFFFF;--s2:#F0EDE9;--border:#E2DDD7;--border2:#D4CFC8;--text:#2C2825;--sub:#8A847C;--muted:#B0AAA2;--accent:#7A6A5A;--accent-dim:rgba(122,106,90,0.08);--gold:#A08060;--star:#C4A060;--r:14px}
@@ -66,6 +71,8 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:0.4;cursor:pointer}
 .toast.show{opacity:1;transform:translateY(0)}
 footer{margin-top:64px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:11px;color:var(--muted);letter-spacing:0.05em}
 .footer-line{flex:1;height:1px;background:var(--border);max-width:60px}
+.btn-logout{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit;padding:0;text-decoration:underline}
+.btn-logout:hover{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -78,10 +85,10 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
     <h1>Resumo de <em>Aula</em></h1>
     <p class="header-sub">Preencha os campos e copie a mensagem para enviar ao aluno</p>
   </header>
-  <div class="sec"><span>Dados da Aula</span></div>
+  <div class="sec"><span>Dados da aula</span></div>
   <div class="card">
     <div class="g2">
-      <div class="field"><label><span class="lico">👤</span> Nome do Aluno</label><input type="text" id="i-nome" placeholder="Ex: Davi" oninput="render()"></div>
+      <div class="field"><label><span class="lico">👤</span> Nome do aluno</label><input type="text" id="i-nome" placeholder="Ex: Davi" oninput="render()"></div>
       <div class="field"><label><span class="lico">📅</span> Data</label><input type="date" id="i-data" oninput="render()"></div>
     </div>
   </div>
@@ -96,7 +103,7 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
     </div>
     <div class="field"><label><span class="lico">💬</span> Observação (opcional)</label><input type="text" id="i-obs" placeholder="Ex: Ótima concentração hoje!" oninput="render()"></div>
   </div>
-  <div class="sec" style="margin-top:28px"><span>Materiais de Estudo</span></div>
+  <div class="sec" style="margin-top:28px"><span>Materiais de estudo</span></div>
   <div class="card">
     <div class="field"><label><span class="lico">🔗</span> Link</label><input type="url" id="i-link" placeholder="https://notion.so/seu-link" oninput="render()"></div>
   </div>
@@ -110,10 +117,15 @@ footer{margin-top:64px;display:flex;align-items:center;justify-content:center;ga
     </div>
   </div>
   <div class="actions">
-    <button class="btn btn-primary" onclick="copiar()">📋 Copiar Mensagem</button>
+    <button class="btn btn-primary" onclick="copiar()">📋 Copiar mensagem</button>
   </div>
   <div class="toast" id="toast">✓ Copiado! Cole direto no WhatsApp ou e-mail.</div>
-  <footer><div class="footer-line"></div>Contra-Facta<div class="footer-line"></div></footer>
+  <footer>
+    <div class="footer-line"></div>
+    Feito com ♪ para suas aulas
+    <div class="footer-line"></div>
+    <button class="btn-logout" onclick="logout()">Sair</button>
+  </footer>
 </div>
 <script>
 let starVal=0;
@@ -136,6 +148,7 @@ function render(){
   document.getElementById('chars').textContent=msg.length+' caracteres';
 }
 function copiar(){const txt=document.getElementById('preview').textContent;if(txt.startsWith('Preencha'))return;navigator.clipboard.writeText(txt).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)})}
+async function logout(){await _sb.auth.signOut();window.location.href='login.html'}
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(()=>console.log('SW ok')).catch(e=>console.log('SW erro:',e))})}
 </script>
 </body>
