@@ -423,14 +423,14 @@ function evItem(e,ed){
 function gIcon(){return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>'}
 function daysUntil(iso){var t=todayIso().split('-'),d=iso.split('-');return Math.round((new Date(+d[0],+d[1]-1,+d[2])-new Date(+t[0],+t[1]-1,+t[2]))/86400000)}
 function whenLabel(e){var a=daysUntil(e.date),b=daysUntil(e.end||e.date);if(a<=0&&b>=0)return a===0&&b===0?'Hoje':'Acontecendo agora';if(a===1)return 'Amanhã';if(a<60)return 'Em '+a+' dias';var m=Math.round(a/30);return 'Em '+m+' meses'}
-function upcoming(){var t=todayIso();return (D.events||[]).filter(function(e){return e.type!=='evento'&&(e.end||e.date)>=t}).sort(function(a,b){return a.date.localeCompare(b.date)})}
+function upcoming(){var t=todayIso();return (D.events||[]).filter(function(e){return (e.type==='recital'||e.type==='ferias')&&(e.end||e.date)>=t}).sort(function(a,b){return a.date.localeCompare(b.date)})}
 function remRow(e,ed){
  var t=EVT[e.type]||EVT.evento;var f=fmtDate(e.date);var f2=e.end&&e.end!==e.date?fmtDate(e.end):null;
  return '<li class="rem" style="--ev:'+t.c+'"><span class="rem-d"><span class="fig">'+esc(f.d)+'</span><span>'+esc(f.m)+'</span></span>'+
  '<span class="rem-b"><span class="rem-t">'+esc(e.title)+'</span><span class="rem-m">'+(f2?'<span>até '+esc(f2.d)+' '+esc(f2.m)+'</span>':'')+(e.time?'<span>'+esc(e.time)+(e.endTime?'–'+esc(e.endTime):'')+'</span>':'')+(e.place?'<span>'+esc(e.place)+'</span>':'')+'</span>'+(e.desc?'<span class="rem-desc">'+esc(e.desc)+'</span>':'')+'</span>'+
  '<span class="rem-a"><span class="rem-when">'+whenLabel(e)+'</span><a class="btn small" target="_blank" rel="noopener" href="'+gcalLink(e)+'" aria-label="Lembrar '+esc(e.title)+' no Google Agenda">'+gIcon()+'Lembrar no Google ↗</a>'+(ed?'<button class="btn small danger" data-del-event="'+e.id+'">Remover</button>':'')+'</span></li>';
 }
-var REMG=[['feriado','Feriados','Nenhum feriado pela frente.'],['recital','Recitais','Nenhum recital marcado.'],['ferias','Férias','Férias a definir.'],['reposicao','Reposições','Nenhuma reposição marcada.']];
+var REMG=[['recital','Recitais','Nenhum recital marcado.'],['ferias','Férias','Férias a definir.']];
 function vLembretes(){
  var ed=editing();var up=upcoming();ui.remOpen=ui.remOpen||{};
  var groups=REMG.map(function(g){
