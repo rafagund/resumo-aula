@@ -94,6 +94,14 @@ main{min-width:0;padding-block:20px 96px;padding-left:max(16px,env(safe-area-ins
   .menu-fab{display:none}
   main{padding-block:40px 72px}
 }
+@media not all and (hover:hover) and (pointer:fine) and (min-width:900px){
+  .menu-fab{top:calc(6px + env(safe-area-inset-top,0px));bottom:auto;min-height:44px;padding:0 18px;z-index:31;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .rail{top:calc(8px + env(safe-area-inset-top,0px));bottom:auto;transform:translate(-50%,calc(-100% - 40px))}
+  .rail.open{transform:translate(-50%,0)}
+  main{padding-block:20px 48px}
+  .teacher-bar{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+}
 @media (prefers-reduced-motion:reduce){.rail,.rail.open{transition:none}}
 
 /* Common */
