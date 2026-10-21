@@ -64,33 +64,35 @@ p{margin:0}
 /* Shell */
 .shell{min-height:100vh}
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:flex-end;gap:12px;min-height:56px;box-sizing:border-box;
   padding-block:8px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .menu-btn{display:inline-flex;align-items:center;gap:8px;background:none;border:0;color:var(--fg);cursor:pointer;min-height:44px;padding:0 8px;font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
 .menu-btn svg{width:22px;height:22px}
-main{min-width:0;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{min-width:0;padding-block:20px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:1040px;margin:0 auto;display:grid;gap:28px}
 .wrap>*,.section-head>*{min-width:0}
-.rail{position:fixed;top:0;left:0;bottom:0;z-index:46;width:252px;max-width:86vw;box-sizing:border-box;display:flex;flex-direction:column;gap:22px;
-  padding:calc(20px + env(safe-area-inset-top,0px)) 18px calc(24px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));
-  background:var(--surface);border-right:1px solid var(--line);transform:translateX(-100%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
-.rail.open{transform:none;visibility:visible;box-shadow:0 6px 28px rgba(0,0,0,.28);transition:transform .25s ease,visibility 0s}
-.rail-head{display:flex;align-items:center;justify-content:space-between}
-.rail nav{display:grid;gap:2px}
-.rail .tab{display:grid;grid-template-columns:22px 1fr;justify-items:start;align-items:center;gap:12px;min-height:44px;font-size:14.5px;padding:10px 12px;border-radius:8px;letter-spacing:0;color:var(--fg);background:none;border:0;cursor:pointer;width:100%}
-.rail .tab svg{width:19px;height:19px;color:var(--muted)}
-.rail .tab:hover{background:var(--surface-2)}
+.rail{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:46;display:flex;align-items:center;gap:4px;padding:6px;max-width:calc(100vw - 24px);box-sizing:border-box;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.22);
+  transform:translate(-50%,calc(100% + 40px));visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+.rail.open{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease,visibility 0s}
+.rail-head,.rail .foot{display:none}
+.rail nav{display:flex;gap:4px}
+.rail .tab{display:grid;justify-items:center;align-content:center;gap:4px;min-width:76px;min-height:56px;padding:8px 10px;border-radius:10px;background:none;border:0;cursor:pointer;color:var(--muted);font-size:12px;letter-spacing:.02em}
+.rail .tab svg{width:21px;height:21px}
+.rail .tab:hover{background:var(--surface-2);color:var(--fg)}
 .rail .tab[aria-current="page"]{background:var(--surface-2);color:var(--amber)}
-.rail .tab[aria-current="page"] svg{color:var(--amber)}
-.rail .foot{margin-top:auto;font-size:12.5px;color:var(--muted);display:grid;gap:4px}
 .menu-scrim{position:fixed;inset:0;z-index:45;background:var(--scrim)}
-.edge{display:none;position:fixed;left:0;top:0;bottom:0;width:22px;z-index:44;background:none;border:0;padding:0;cursor:pointer}
-.edge::after{content:"";position:absolute;left:7px;top:50%;width:4px;height:64px;margin-top:-32px;border-radius:2px;background:var(--line-strong);opacity:.8;transition:opacity .2s,background .2s}
+.menu-fab{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:44;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);box-shadow:0 10px 30px rgba(0,0,0,.22);cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.menu-fab svg{width:20px;height:20px}
+.menu-fab[hidden],.menu-scrim[hidden]{display:none}
+.edge{display:none;position:fixed;left:0;right:0;bottom:0;height:28px;z-index:44;background:none;border:0;padding:0;cursor:pointer}
+.edge::after{content:"";position:absolute;left:50%;bottom:9px;width:72px;height:4px;margin-left:-36px;border-radius:2px;background:var(--line-strong);opacity:.8;transition:opacity .2s,background .2s}
 .edge:hover::after,.edge:focus-visible::after{background:var(--amber);opacity:1}
 @media (hover:hover) and (pointer:fine) and (min-width:900px){
   .topbar{display:none}
   .edge{display:block}
-  main{padding-block:40px 64px}
+  .menu-fab{display:none}
+  main{padding-block:40px 72px}
 }
 @media (prefers-reduced-motion:reduce){.rail,.rail.open{transition:none}}
 
@@ -308,7 +310,7 @@ textarea{resize:vertical;min-height:72px}
 .contact-row .val{font-size:17px;user-select:all}
 
 /* Teacher bar, sheet, toast */
-.teacher-bar{position:fixed;z-index:35;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 28px)}
+.teacher-bar{position:fixed;z-index:35;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(80px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 28px)}
 .teacher-bar .btn{box-shadow:0 6px 22px rgba(0,0,0,.28)}
 @media (min-width:900px){.teacher-bar{bottom:calc(22px + env(safe-area-inset-bottom,0px))}}
 .sheet-bg{position:fixed;inset:0;z-index:50;background:var(--scrim);display:grid;align-items:end;justify-items:center}
@@ -320,7 +322,7 @@ textarea{resize:vertical;min-height:72px}
 .sheet-head h2{font-size:28px;font-weight:700}
 .x{background:none;border:0;font-size:26px;line-height:1;cursor:pointer;color:var(--muted);padding:2px 6px}
 .msg{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:14px;white-space:pre-wrap}
-.toast{position:fixed;z-index:60;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;max-width:calc(100vw - 32px);text-align:center}
+.toast{position:fixed;z-index:60;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;max-width:calc(100vw - 32px);text-align:center}
 .edit-flag{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-body);font-weight:500;font-size:13px;color:var(--crimson)}
 @media (prefers-reduced-motion:no-preference){
   .view.anim{animation:rise .35s ease both}
@@ -713,8 +715,8 @@ function render(){
    (ui.edit&&dirty?'<button class="btn" data-discard>Descartar</button><button class="btn primary" data-publish'+(ui.publishing?' disabled':'')+'>'+(ui.publishing?'Publicando…':'Publicar alterações')+'</button>':'')+
    '<button class="btn" data-edit-toggle aria-pressed="'+ui.edit+'">'+(ui.edit?'Sair da edição':'Editar conteúdo')+'</button></div>';
  }
- app.innerHTML='<div class="shell"><aside class="rail'+(ui.menu?' open':'')+'" aria-label="Menu"><div class="rail-head"><span class="eyebrow">Menu</span><button class="x" data-menu-close aria-label="Fechar menu">×</button></div><nav aria-label="Seções">'+navButtons()+'</nav><div class="foot"><span>'+esc(D.contact.whatsappLabel)+'</span><span>@'+esc(D.contact.instagram)+'</span></div></aside><div class="menu-scrim" data-menu-close'+(ui.menu&&ui.menuTap?'':' hidden')+'></div><button class="edge" data-menu aria-label="Abrir menu"></button>'+
- '<header class="topbar"><button class="menu-btn" data-menu aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Menu</button>'+(editing()?'<span class="edit-flag">Editando</span>':(ui.view==='agenda'?'<span class="eyebrow">Agenda</span>':'<button class="btn small primary" data-nav="agenda">Agendar</button>'))+'</header>'+
+ app.innerHTML='<div class="shell"><aside class="rail'+(ui.menu?' open':'')+'" aria-label="Menu"><div class="rail-head"><span class="eyebrow">Menu</span><button class="x" data-menu-close aria-label="Fechar menu">×</button></div><nav aria-label="Seções">'+navButtons()+'</nav><div class="foot"><span>'+esc(D.contact.whatsappLabel)+'</span><span>@'+esc(D.contact.instagram)+'</span></div></aside><div class="menu-scrim" data-menu-close'+(ui.menu&&ui.menuTap?'':' hidden')+'></div><button class="edge" data-menu aria-label="Abrir menu"></button><button class="menu-fab" data-menu aria-label="Abrir menu"'+(ui.menu?' hidden':'')+'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>'+
+ '<header class="topbar">'+(editing()?'<span class="edit-flag">Editando</span>':(ui.view==='agenda'?'<span class="eyebrow">Agenda</span>':'<button class="btn small primary" data-nav="agenda">Agendar</button>'))+'</header>'+
  '<main>'+(editing()?'<div class="wrap" style="gap:10px;margin-bottom:6px"><span class="edit-flag">Modo de edição · as mudanças só aparecem para os alunos depois de publicar</span></div>':'')+view+'</main>'+
  '</div>'+tb+sheetHTML()+(ui.toast?'<div class="toast" role="status">'+esc(ui.toast)+'</div>':'');
  if(anim){var vw=app.querySelector('.view');if(vw)vw.classList.add('anim')}
@@ -724,7 +726,7 @@ function render(){
 function renderList(){var l=document.getElementById('rep-list');if(l)l.innerHTML=songList();var c=document.getElementById('rep-count');if(c)c.textContent=filteredSongs().length+' de '+D.songs.length+' músicas'}
 var tTimer;function toast(t){ui.toast=t;render();clearTimeout(tTimer);tTimer=setTimeout(function(){ui.toast='';render()},3200)}
 var menuT;
-function setMenu(v,tap){ui.menu=v;ui.menuTap=!!(v&&tap);var r=app.querySelector('.rail');if(r)r.classList.toggle('open',v);var sc=app.querySelector('.menu-scrim');if(sc)sc.hidden=!(v&&ui.menuTap);var mb=app.querySelector('.menu-btn');if(mb)mb.setAttribute('aria-expanded',v?'true':'false');if(v&&tap){var f=app.querySelector('.rail .tab[aria-current]');if(f)f.focus()}}
+function setMenu(v,tap){ui.menu=v;ui.menuTap=!!(v&&tap);var r=app.querySelector('.rail');if(r)r.classList.toggle('open',v);var sc=app.querySelector('.menu-scrim');if(sc)sc.hidden=!(v&&ui.menuTap);var fb=app.querySelector('.menu-fab');if(fb)fb.hidden=v;if(v&&tap){var f=app.querySelector('.rail .tab[aria-current]');if(f)f.focus()}}
 app.addEventListener('mouseover',function(e){if(e.target.closest&&e.target.closest('.edge,.rail')){clearTimeout(menuT);if(!ui.menu)setMenu(true,false)}});
 app.addEventListener('mouseout',function(e){if(!e.target.closest||!e.target.closest('.edge,.rail'))return;var to=e.relatedTarget;if(to&&to.closest&&to.closest('.edge,.rail'))return;if(ui.menuTap)return;clearTimeout(menuT);menuT=setTimeout(function(){setMenu(false)},350)});
 function go(v){ui.menu=false;ui.menuTap=false;ui._anim=v!==ui.view;ui.view=v;ui.sheet=null;sSet('localStorage','rf-view',v);try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo(0,0)}
