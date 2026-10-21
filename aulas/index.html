@@ -128,12 +128,14 @@ textarea{resize:vertical;min-height:72px}
 @media (max-width:640px){.chips.scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px));padding-block:2px;scroll-padding-inline:16px}.chips.scroll::-webkit-scrollbar{display:none}.chips.scroll{flex:1 1 100%;min-width:0}.filters{gap:12px}}
 /* Home */
 .hero{--ink:#f6ecdf;--ink-2:rgba(246,236,223,.74);--night:#2b231e;display:grid;gap:16px;color:var(--ink)}
-.hero-photo{position:relative;min-height:420px;border-radius:var(--r);overflow:hidden;background:var(--night)}
+.home-side{display:grid;gap:22px;grid-auto-rows:1fr}
+.home-side>*{align-content:center;align-items:center}
+.hero-photo{position:relative;min-height:320px;border-radius:var(--r);overflow:hidden;background:var(--night)}
 .hero-photo::before{content:"";position:absolute;inset:0;background:var(--hero) center 18%/cover no-repeat;filter:saturate(.9) contrast(1.06)}
-.hero-text{position:relative;display:grid;gap:16px;align-content:center;padding:32px 24px;border-radius:var(--r);background:var(--night)}
+.hero-text{position:relative;display:grid;gap:14px;align-content:center;padding:28px 22px;border-radius:var(--r);background:var(--night)}
 .hero-text::before{content:"";width:44px;height:2px;background:#e46479}
-.hero-text .script{font-size:clamp(46px,10vw,76px);font-weight:400;line-height:1;letter-spacing:-.02em;color:var(--ink)}
-.hero-role{font-family:var(--f-display);font-weight:400;font-size:clamp(18px,2.4vw,22px);letter-spacing:.01em;color:var(--ink);display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.hero-text .script{font-size:clamp(40px,8vw,60px);font-weight:400;line-height:1;letter-spacing:-.02em;color:var(--ink)}
+.hero-role{font-family:var(--f-display);font-weight:400;font-size:clamp(17px,2vw,20px);letter-spacing:.01em;color:var(--ink);display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
 .hero-role i{width:4px;height:4px;border-radius:50%;background:#e46479}
 .hero-text .lead{font-size:clamp(16px,2vw,18px);max-width:34ch;color:var(--ink-2)}
 .hero .btn{border-color:rgba(246,236,223,.55);color:var(--ink)}
@@ -142,8 +144,8 @@ textarea{resize:vertical;min-height:72px}
 .hero :focus-visible{outline-color:#dba468}
 @media (min-width:820px){
   .hero{grid-template-columns:1.1fr .9fr;gap:22px}
-  .hero-photo{order:2;min-height:520px}
-  .hero-text{order:1;padding:56px 48px 56px 56px;gap:20px}
+  .hero-photo{order:2;min-height:420px}
+  .hero-text{order:1;padding:44px 40px 44px 44px;gap:16px}
 }
 
 .timeline{position:relative;display:grid;gap:22px;padding-left:26px}
@@ -515,7 +517,7 @@ function vHome(){
  tl('Formação','Licenciado em Educação Musical (UFG). Bacharelado em violão em curso.')+
  tl('Pesquisa','Musicologia e Educação Musical. Prêmio SBPC/GO 2018 e 2019.')+
  '</div></div>'+
- '<div style="display:grid;gap:22px;align-content:start">'+(bookOk(D.bookingUrl)&&!D.slots.length?bookCard(false):'<div class="panel"><div class="eyebrow">Próximos horários livres</div>'+
+ '<div class="home-side">'+(bookOk(D.bookingUrl)&&!D.slots.length?bookCard(false):'<div class="panel"><div class="eyebrow">Próximos horários livres</div>'+
  (free.length?free.map(function(s){return '<div class="slot-mini"><span>'+DAYS[s.day]+' · <span class="fig" style="font-size:19px">'+esc(s.time)+'</span></span><span class="muted" style="font-size:13px">'+esc(s.mode)+'</span></div>'}).join(''):'<p class="muted" style="margin-top:10px">Nenhum horário livre no momento. Fale comigo pelo WhatsApp para entrar na lista de espera.</p>')+
  '<div style="margin-top:12px"><button class="linkish" data-nav="agenda">Ver agenda completa</button></div></div>')+
  (function(){var nx=upcoming()[0];if(!nx)return '';var f=fmtDate(nx.date);return '<button class="panel next-date" data-nav="agenda"><span class="rem-d"><span class="fig">'+esc(f.d)+'</span><span>'+esc(f.m)+'</span></span><span style="display:grid;gap:2px;text-align:left;min-width:0"><span class="eyebrow">Próxima data importante</span><span style="font-size:16.5px">'+esc(nx.title)+'</span><span class="muted" style="font-size:13px">'+whenLabel(nx)+'</span></span></button>'})()+
