@@ -198,6 +198,20 @@ textarea{resize:vertical;min-height:72px}
 .book{align-content:center}
 .book-band{grid-template-columns:auto minmax(0,1fr)}
 .book-band .book-title{font-size:clamp(34px,5vw,46px)}
+.book.book-contact{grid-template-columns:minmax(0,1fr)!important;gap:6px}
+.book .book-cta.nav{justify-content:center!important;padding:0 22px}
+.book-head{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.book-contact .contact-row{border-bottom-color:rgba(246,236,223,.12)}
+.book-contact .contact-row:last-of-type{border-bottom:0}
+.book-contact .muted{color:rgba(246,236,223,.6)!important}
+.book-contact .val{color:var(--cream)}
+.book-contact .btn:not(.primary){color:var(--cream);border-color:rgba(246,236,223,.4);background:transparent}
+.book-contact .btn:not(.primary):hover{border-color:var(--cream)}
+.book-contact .btn.primary{background:#dba468;border-color:#dba468;color:#1b120d}
+.book-contact .btn.primary .go{background:#1b120d;color:#dba468}
+.book-contact .btn:not(.primary) .go{background:#dba468;color:#1b120d}
+h2.book-title{margin:0}
+
 .book{--cream:#f6ecdf;position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px 22px;padding:28px 30px;border-radius:var(--r);color:var(--cream);background:radial-gradient(120% 160% at 100% 0%,rgba(219,164,104,.24),transparent 55%),linear-gradient(135deg,#2b231e,#1f1914);box-shadow:inset 0 0 0 1px rgba(246,236,223,.08),0 14px 34px -18px rgba(27,18,13,.55)}
 .book::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#e46479,#dba468)}
 .book>*{position:relative}
@@ -464,6 +478,8 @@ function keyChip(k){return '<span class="key">'+esc(KEYNAMES[k]||k)+'<small>'+es
 function waLink(text){return 'https://wa.me/'+encodeURIComponent((D.contact&&D.contact.whatsapp)||'')+'?text='+encodeURIComponent(text)}
 function bookOk(u){return /^https:\/\/(calendar\.app\.google\/|calendar\.google\.com\/calendar\/(u\/\d+\/)?appointments\/)/.test(String(u||'').trim())}
 function TX(k,d){var v=(D.texts&&D.texts[k]!=null)?D.texts[k]:d;return editing()?'<span class="tx'+(v===''?' tx-empty':'')+'" data-tx="'+k+'" data-ph="(vazio — toque para escrever)" contenteditable="plaintext-only" spellcheck="true">'+esc(v)+'</span>':esc(v)}
+var ICO={"cal": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15.5\" rx=\"2.5\"/><path d=\"M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5M8 17.5h2M12 17.5h2\"/></svg>", "keys": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2.5\"/><path d=\"M8 5v14M13 5v14M18 5v14\"/><path d=\"M6.5 5v7.5M10.5 5v7.5M15.5 5v7.5\" stroke-width=\"2.6\"/></svg>", "spark": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z\"/><path d=\"M18.5 16l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z\"/></svg>", "chat": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.6A7.5 7.5 0 1 1 20 11.5z\"/><path d=\"M9 10.5h6M9 13.5h4\"/></svg>", "steps": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 19.5h4.5v-5H13v-5h4.5v-5H20\"/><path d=\"M4 19.5h16\"/></svg>"};
+function headCard(i,t,p,tag){tag=tag||'h1';return '<section class="book-wrap big"><div class="book book-band"><span class="book-staff" aria-hidden="true"></span><span class="book-ic" aria-hidden="true">'+ICO[i]+'</span><div class="book-tx"><'+tag+' class="book-title">'+t+'</'+tag+'>'+(p!==null?'<p>'+p+'</p>':'')+'</div></div></section>'}
 function bookCard(big){var ok=bookOk(D.bookingUrl);if(!ok)return '';return '<div class="book-wrap'+(big?' big':'')+'"><div class="book"><span class="book-staff" aria-hidden="true"></span><span class="book-ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15.2l2 2 4-4.2"/></svg></span><div class="book-tx"><div class="eyebrow">'+TX('book.eyebrow','Agendamento online')+'</div><h2 class="book-title">'+TX('book.title','Escolha seu horário')+'</h2><p>'+TX('book.sub','Horários livres em tempo real.')+'</p></div><a class="btn primary book-cta" target="_blank" rel="noopener noreferrer" href="'+esc(D.bookingUrl)+'">'+TX('book.cta','Agendar pelo Google Agenda')+GO+'</a></div></div>'}
 function sortSlots(a,b){return a.day-b.day||a.time.localeCompare(b.time)}
 function fmtDate(iso){var p=String(iso||'').split('-');if(p.length<3)return {d:'',m:''};return {d:p[2],m:MONTHS[(+p[1])-1]||''}}
@@ -612,7 +628,7 @@ function vAgenda(){
  }
  var ev=(D.events||[]).slice().sort(function(a,b){return a.date.localeCompare(b.date)});
  return '<div class="wrap view">'+
- '<div class="section-head"><div><h1><span class="t-main">'+TX('agenda.title','Agenda')+'</span><span class="t-script">marque sua aula</span></h1></div><p>'+(bookOk(D.bookingUrl)?TX('agenda.sub','Agende online ou pelo WhatsApp.'):TX('agenda.sub2','Escolha um horário livre.'))+'</p></div>'+bookCard(true)+
+ headCard('cal',TX('agenda.title','Agenda'),bookOk(D.bookingUrl)?TX('agenda.sub','Agende online ou pelo WhatsApp.'):TX('agenda.sub2','Escolha um horário livre.'))+bookCard(true)+
  (ed?'<div class="panel" style="display:grid;gap:10px"><div class="edit-flag">Link de agendamento do Google</div><label>Cole aqui o link da sua página de agendamento<input id="bk-url" data-booking-url type="url" value="'+esc(D.bookingUrl)+'" placeholder="https://calendar.app.google/…"></label>'+(D.bookingUrl&&!bookOk(D.bookingUrl)?'<p class="note" id="bk-warn">Este link abre a sua agenda particular, não a página de agendamento. Para os alunos, o botão só aparece com um link de agendamento (calendar.app.google/… ou …/appointments/…). No Google Agenda: abra a sua agenda de agendamento, toque em Compartilhar e copie o link.</p>':'<p class="note" id="bk-warn">'+(D.bookingUrl?'Link válido. O botão “Agendar pelo Google Agenda” aparece para os alunos.':'Sem link, a agenda mostra apenas a grade de horários abaixo.')+'</p>')+'</div>':'')+
  ((D.slots.length||ed)?'<div class="eyebrow" style="margin-bottom:-14px">'+(bookOk(D.bookingUrl)?'Grade semanal de referência':'Horários da semana')+'</div>'+
  (D.agendaExample?'<p class="note">Horários de exemplo. '+(ui.teacher?'Ative a edição para colocar a sua grade real de 2027.':'A grade oficial de 2027 será publicada em breve.')+'</p>':'')+
@@ -644,7 +660,7 @@ function vMetodo(){
  pill(TX('pil2.t','Método particular'),TX('pil2.d','Cada aluno no seu tempo.'))+
  pill(TX('pil3.t','Tecnologia na medida'),TX('pil3.d','Apps de apoio. A música vem primeiro.'))+
  '</section>'+
- '<section style="display:grid;gap:16px"><div class="section-head"><div><h1 style="font-size:clamp(38px,7vw,60px)"><span class="t-main">'+TX('met.path','Trilha de formação')+'</span><span class="t-script">do primeiro acorde ao recital</span></h1></div></div><ol class="path">'+
+ '<section style="display:grid;gap:16px">'+headCard('steps',TX('met.path','Trilha de formação'),null,'h2')+'<ol class="path">'+
  lv.map(function(x){return '<li class="stage" style="--lv:'+x[0]+'"><span class="stage-node" aria-hidden="true"></span><div class="stage-top"><span class="stage-n" aria-hidden="true">0'+x[0]+'</span><span class="meter" role="img" aria-label="Nível '+x[0]+' de 3">'+[1,2,3].map(function(i){return '<i class="'+(i<=x[0]?'on':'')+'"></i>'}).join('')+'</span></div><h3>'+TX('lvl'+x[0]+'.t',x[1])+'</h3><p>'+TX('lvl'+x[0]+'.d',x[2])+'</p><span class="stage-bar" aria-hidden="true"></span></li>'}).join('')+
  '</ol></section>'+
  '<section class="panel" style="display:grid;gap:10px"><div class="eyebrow">'+TX('met.mat','Materiais')+'</div><p style="max-width:70ch">'+TX('met.matd','App de repertório, materiais na nuvem e anotações das aulas no Notion.')+'</p></section></div>';
@@ -708,7 +724,7 @@ function vVideos(){
 function vAulas(){
  var ed=editing();var c=D.contact||{};
  return '<div class="wrap view">'+
- '<div class="section-head"><div><h1><span class="t-main">'+TX('aulas.title','Aulas')+'</span><span class="t-script">do seu jeito</span></h1></div><p>'+TX('aulas.sub','Escolha o formato. Todas são personalizadas.')+'</p></div>'+
+ headCard('keys',TX('aulas.title','Aulas'),TX('aulas.sub','Escolha o formato. Todas são personalizadas.'))+
  '<section class="modes">'+
  md(TX('mod1.t','Presencial'),TX('mod1.d','100% presencial.'))+
  md(TX('mod2.t','Semipresencial'),TX('mod2.d','Online, com encontros presenciais pontuais.'))+
@@ -717,11 +733,11 @@ function vAulas(){
  '<section class="two"><div class="panel"><div class="eyebrow">'+TX('aulas.prices','Valores mensais')+'</div><div class="prices" style="margin-top:10px">'+
  D.prices.map(function(p){return '<div class="price"><span>'+esc(p.name)+'</span>'+(ed?'<label style="width:130px">Valor (R$)<input type="number" min="0" step="5" data-price="'+p.id+'" id="price-'+p.id+'" value="'+p.value+'"></label>':'<span class="fig"><small>R$ </small>'+Number(p.value).toLocaleString('pt-BR',{minimumFractionDigits:2})+'</span>')+'</div>'}).join('')+
  '</div><p class="muted" style="font-size:13.5px;margin-top:12px">'+TX('aulas.pricesNote',D.pricesNote)+'</p></div>'+
- '<div style="display:grid;gap:22px;align-content:start"><div class="panel" style="display:grid;gap:10px"><h2 class="ptitle">'+TX('aulas.exp','Aula experimental')+'</h2><p>'+TX('aulas.expd','Sem custo se você não continuar.')+'</p><div><button class="btn primary" data-nav="agenda">'+TX('aulas.expcta','Escolher horário')+'</button></div></div>'+
- '<div class="panel contact"><div class="eyebrow">'+TX('aulas.contact','Contato')+'</div>'+
+ '<div style="display:grid;gap:22px;align-content:start"><div class="book-wrap"><div class="book"><span class="book-staff" aria-hidden="true"></span><span class="book-ic" aria-hidden="true">'+ICO.spark+'</span><div class="book-tx"><h2 class="book-title">'+TX('aulas.exp','Aula experimental')+'</h2><p>'+TX('aulas.expd','Sem custo se você não continuar.')+'</p></div><button class="btn primary book-cta nav" data-nav="agenda">'+TX('aulas.expcta','Escolher horário')+'</button></div></div>'+
+ '<div class="book-wrap"><div class="book book-contact"><span class="book-staff" aria-hidden="true"></span><div class="book-head"><span class="book-ic" aria-hidden="true">'+ICO.chat+'</span><h2 class="book-title">'+TX('aulas.contact','Contato')+'</h2></div>'+
  '<div class="contact-row"><div style="display:grid"><span class="muted" style="font-size:12.5px">WhatsApp</span><span class="val">'+esc(c.whatsappLabel)+'</span></div><div class="actions"><button class="btn small" data-copy="'+esc(c.whatsappLabel)+'">Copiar</button><a class="btn small primary" target="_blank" rel="noopener noreferrer" href="'+waLink('Olá, professor Rafael! Gostaria de saber mais sobre as aulas.')+'">Abrir conversa'+GO+'</a></div></div>'+
  '<div class="contact-row"><div style="display:grid"><span class="muted" style="font-size:12.5px">Instagram</span><span class="val">@'+esc(c.instagram)+'</span></div><a class="btn small" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/'+encodeURIComponent(c.instagram||'')+'/">Ver perfil'+GO+'</a></div>'+
- '</div></div></section>'+
+ '</div></div></div></section>'+
  '<p class="note">'+TX('aulas.note','Cancele com 24h de antecedência para ter reposição.')+'</p>'+
  '<section class="panel privacy" style="display:grid;gap:8px"><div class="eyebrow">'+TX('priv.title','Privacidade')+'</div><p class="muted" style="font-size:14px;max-width:70ch">'+TX('priv.text','Este app não coleta nem guarda seus dados. O agendamento é feito pelo Google Agenda e as conversas pelo WhatsApp, de acordo com a política de privacidade de cada serviço. Para corrigir ou apagar seus dados, fale comigo pelo WhatsApp.')+'</p></section></div>';
  function md(t,p){return '<div class="panel mode"><h3>'+t+'</h3><p>'+p+'</p></div>'}
