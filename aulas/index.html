@@ -197,7 +197,30 @@ textarea{resize:vertical;min-height:72px}
 .slot.ocupado .fig{text-decoration:line-through;text-decoration-color:var(--busy)}
 .slot-edit{display:flex;gap:6px;flex-wrap:wrap}
 .events{display:grid;gap:0}
-.book{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;border-color:color-mix(in srgb,var(--amber) 55%,var(--line))}
+.book-wrap{container-type:inline-size;display:grid}
+.home-side>.book-wrap{align-items:stretch;align-content:stretch}
+.book{align-content:center}
+.book{--cream:#f6ecdf;position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px 22px;padding:28px 30px;border-radius:var(--r);color:var(--cream);background:radial-gradient(120% 160% at 100% 0%,rgba(219,164,104,.24),transparent 55%),linear-gradient(135deg,#2b231e,#1f1914);box-shadow:inset 0 0 0 1px rgba(246,236,223,.08),0 14px 34px -18px rgba(27,18,13,.55)}
+.book::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#e46479,#dba468)}
+.book>*{position:relative}
+.book>.book-staff{position:absolute;right:0;top:50%;width:min(48%,440px);height:65px;transform:translateY(-50%);background:repeating-linear-gradient(to bottom,rgba(246,236,223,.13) 0 1px,transparent 1px 16px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 55%);mask-image:linear-gradient(90deg,transparent,#000 55%);pointer-events:none}
+.book-ic{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;color:#dba468;border:1px solid rgba(219,164,104,.5);background:rgba(219,164,104,.1)}
+.book-tx{display:grid;gap:6px;min-width:0}
+.book .eyebrow{color:rgba(246,236,223,.62)}
+.book .eyebrow:empty,.book p:empty{display:none}
+.book-title{font-family:var(--f-display);font-weight:300;font-size:34px;letter-spacing:-.02em;line-height:1.05;color:var(--cream)}
+.book p{color:rgba(246,236,223,.74);font-size:14.5px;max-width:52ch}
+.book .book-cta{white-space:nowrap;background:#dba468;border-color:#dba468;color:#1b120d;min-height:46px;padding:0 16px 0 22px}
+.book .book-cta .go{background:#1b120d;color:#dba468}
+.book .book-cta:hover{filter:brightness(1.08)}
+@container (max-width:640px){
+ .book{grid-template-columns:auto minmax(0,1fr);padding:24px 22px;gap:18px 16px}
+ .book-ic{width:46px;height:46px}
+ .book-title{font-size:26px}
+ .book .book-cta{grid-column:1/-1;width:100%;justify-content:space-between;font-size:11.5px;letter-spacing:.07em}
+ .book>.book-staff{top:52px;width:75%}
+}
+
 .cal-wrap{display:grid;gap:16px}
 @media (min-width:980px){.cal-wrap{grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);align-items:start}}
 .cal{padding:16px;display:grid;gap:10px;min-width:0}
@@ -365,6 +388,18 @@ textarea{resize:vertical;min-height:72px}
   .view.anim{animation:rise .35s ease both}
   @keyframes rise{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
 }
+.rem-grid{min-width:0}
+@media (max-width:619px){
+ .rem-grid .rem-group{padding:18px 18px 10px}
+ .rem{grid-template-columns:54px minmax(0,1fr);gap:6px 14px;padding:14px 0}
+ .rem-d .fig{font-size:24px}
+ .rem-t{font-size:16px;line-height:1.35}
+ .rem-a{grid-column:1/-1;justify-content:space-between;padding-top:6px}
+ .rem-a{gap:8px}
+ .rem-a .btn{white-space:nowrap;letter-spacing:.05em;padding:7px 8px 7px 12px}
+ .rem-a .btn>svg:first-child{display:none}
+ .rem-h{font-size:21px}
+}
 </style>
 
 </head>
@@ -431,7 +466,7 @@ function keyChip(k){return '<span class="key">'+esc(KEYNAMES[k]||k)+'<small>'+es
 function waLink(text){return 'https://wa.me/'+encodeURIComponent((D.contact&&D.contact.whatsapp)||'')+'?text='+encodeURIComponent(text)}
 function bookOk(u){return /^https:\/\/(calendar\.app\.google\/|calendar\.google\.com\/calendar\/(u\/\d+\/)?appointments\/)/.test(String(u||'').trim())}
 function TX(k,d){var v=(D.texts&&D.texts[k]!=null)?D.texts[k]:d;return editing()?'<span class="tx'+(v===''?' tx-empty':'')+'" data-tx="'+k+'" data-ph="(vazio — toque para escrever)" contenteditable="plaintext-only" spellcheck="true">'+esc(v)+'</span>':esc(v)}
-function bookCard(big){var ok=bookOk(D.bookingUrl);if(!ok)return '';return '<div class="panel book"><div style="display:grid;gap:6px;min-width:0"><div class="eyebrow">'+TX('book.eyebrow','Agendamento online')+'</div><h2 class="ptitle" style="font-size:'+(big?'34px':'28px')+'">'+TX('book.title','Escolha seu horário')+'</h2><p class="muted" style="font-size:14.5px;max-width:52ch">'+TX('book.sub','Horários livres em tempo real.')+'</p></div><a class="btn primary" target="_blank" rel="noopener noreferrer" href="'+esc(D.bookingUrl)+'">'+TX('book.cta','Agendar pelo Google Agenda')+''+GO+'</a></div>'}
+function bookCard(big){var ok=bookOk(D.bookingUrl);if(!ok)return '';return '<div class="book-wrap'+(big?' big':'')+'"><div class="book"><span class="book-staff" aria-hidden="true"></span><span class="book-ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15.2l2 2 4-4.2"/></svg></span><div class="book-tx"><div class="eyebrow">'+TX('book.eyebrow','Agendamento online')+'</div><h2 class="book-title">'+TX('book.title','Escolha seu horário')+'</h2><p>'+TX('book.sub','Horários livres em tempo real.')+'</p></div><a class="btn primary book-cta" target="_blank" rel="noopener noreferrer" href="'+esc(D.bookingUrl)+'">'+TX('book.cta','Agendar pelo Google Agenda')+GO+'</a></div></div>'}
 function sortSlots(a,b){return a.day-b.day||a.time.localeCompare(b.time)}
 function fmtDate(iso){var p=String(iso||'').split('-');if(p.length<3)return {d:'',m:''};return {d:p[2],m:MONTHS[(+p[1])-1]||''}}
 
@@ -491,7 +526,7 @@ function vLembretes(){
   '<label class="full">Descrição (opcional)<input name="desc" id="ne-desc"></label>'+
   '</div><div class="actions"><button class="btn primary" type="submit">Adicionar data</button></div></form>':'';
  return '<section style="display:grid;gap:16px">'+
- '<div class="section-head"><div><h1 style="font-size:clamp(34px,6vw,52px)"><span class="t-main">'+TX('dates.title','Datas importantes')+'</span></h1></div></div>'+
+ '<div class="section-head"><div><h1 style="font-size:clamp(30px,6vw,52px)"><span class="t-main">'+TX('dates.title','Datas importantes')+'</span></h1></div></div>'+
  '<div class="rem-grid">'+groups+'</div>'+form+'</section>';
 }
 function vCalendar(){
