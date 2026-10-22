@@ -196,6 +196,8 @@ textarea{resize:vertical;min-height:72px}
 .book-wrap{container-type:inline-size;display:grid}
 .home-side>.book-wrap{align-items:stretch;align-content:stretch}
 .book{align-content:center}
+.book-band{grid-template-columns:auto minmax(0,1fr)}
+.book-band .book-title{font-size:clamp(34px,5vw,46px)}
 .book{--cream:#f6ecdf;position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px 22px;padding:28px 30px;border-radius:var(--r);color:var(--cream);background:radial-gradient(120% 160% at 100% 0%,rgba(219,164,104,.24),transparent 55%),linear-gradient(135deg,#2b231e,#1f1914);box-shadow:inset 0 0 0 1px rgba(246,236,223,.08),0 14px 34px -18px rgba(27,18,13,.55)}
 .book::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#e46479,#dba468)}
 .book>*{position:relative}
@@ -636,7 +638,7 @@ function vMetodo(){
   [3,'Avançado','Bach, Chopin e interpretação com autonomia.']
  ];
  return '<div class="wrap view">'+
- '<section class="band"><h1><span class="t-main">'+TX('met.title','Abordagens')+'</span><span class="t-script">e metodologias</span></h1><p>'+TX('met.sub','Construída em sala de aula.')+'</p></section>'+
+ '<section class="book-wrap big"><div class="book book-band"><span class="book-staff" aria-hidden="true"></span><span class="book-ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/><path d="M9 9.5l11-2"/></svg></span><div class="book-tx"><h1 class="book-title">'+TX('met.title','Abordagens')+'</h1><p>'+TX('met.sub','Construída em sala de aula.')+'</p></div></div></section>'+
  '<section class="pillars">'+
  pill(TX('pil1.t','Aulas dinâmicas'),TX('pil1.d','Áudio e vídeo de referência para praticar.'))+
  pill(TX('pil2.t','Método particular'),TX('pil2.d','Cada aluno no seu tempo.'))+
